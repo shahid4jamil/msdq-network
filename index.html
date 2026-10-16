@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>MSDQ Network — Cloud Mining & Ecosystem</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="bg-slate-950 text-white min-h-screen select-none overflow-x-hidden">
+
+  <!-- Global Announcement Banner (Controlled by Admin) -->
+  <div id="globalBanner" class="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700 text-xs py-2 px-4 text-center font-medium flex items-center justify-center gap-2 shadow-md">
+    <i class="fa-solid fa-bullhorn animate-bounce"></i>
+    <span id="announcementText">Welcome to MSDQ Network Mainnet Phase 1! Mine $MSDQ Daily.</span>
+  </div>
+
+  <!-- App Container -->
+  <div class="max-w-md mx-auto min-h-screen flex flex-col justify-between pb-28 px-4 pt-3 relative">
+
+    <!-- Top Profile & Network Status Header -->
+    <header class="flex items-center justify-between glass-card p-3 rounded-2xl mb-3">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+          <span class="font-cyber font-extrabold text-slate-950 text-sm">MSDQ</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="font-cyber font-bold text-sm tracking-wide text-white" id="displayUsername">Miner_MSDQ</h1>
+            <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 text-[10px] px-1.5 py-0.5 rounded font-semibold" id="minerRankBadge">Node v1</span>
+          </div>
+          <p class="text-[11px] text-slate-400">UID: <span id="displayUid" class="font-mono text-slate-300">#MSDQ-8841</span></p>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <div class="inline-flex items-center gap-1.5 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="text-xs font-mono font-bold text-emerald-300"><span id="headerHashrate">1.00</span> MH/s</span>
+        </div>
+        <a href="admin/admin.html" class="block text-[10px] text-cyan-400 hover:underline mt-1">
+          <i class="fa-solid fa-shield-halved mr-1"></i>Admin Panel
+        </a>
+      </div>
+    </header>
+
+    <!-- Primary Balance Overview Card -->
+    <section class="glass-card rounded-3xl p-4 mb-4 text-center relative overflow-hidden border border-cyan-500/25">
+      <div class="bg-glow-orb"></div>
+      <p class="text-[11px] uppercase tracking-widest text-slate-400 font-semibold">Total Available Balance</p>
+      <div class="flex items-center justify-center gap-2 my-1.5">
+        <div class="w-8 h-8 rounded-full bg-amber-400 text-slate-950 font-cyber font-black flex items-center justify-center text-sm shadow">M</div>
+        <h2 id="mainMsdqBalance" class="font-cyber text-4xl font-extrabold tracking-tight text-white">0.00</h2>
+        <span class="text-xs font-cyber text-cyan-400 self-end mb-1.5">$MSDQ</span>
+      </div>
+      <p class="text-xs text-emerald-400 font-medium">
+        ≈ $<span id="mainUsdtValue">0.0000</span> USDT
+        <span class="text-slate-500 mx-1">|</span>
+        <span class="text-amber-300">1 MSDQ = $<span id="liveCoinPrice">0.05</span></span>
+      </p>
+
+      <!-- Live Telemetry Row -->
+      <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-slate-800/80">
+        <div class="bg-slate-900/70 rounded-xl p-2">
+          <p class="text-[10px] text-slate-400 uppercase">Tap Output</p>
+          <p class="text-xs font-bold text-cyan-300">+<span id="statTapPower">1.0</span> MSDQ</p>
+        </div>
+        <div class="bg-slate-900/70 rounded-xl p-2">
+          <p class="text-[10px] text-slate-400 uppercase">Auto Miner</p>
+          <p class="text-xs font-bold text-amber-300">+<span id="statAutoRate">0.5</span>/sec</p>
+        </div>
+        <div class="bg-slate-900/70 rounded-xl p-2">
+          <p class="text-[10px] text-slate-400 uppercase">Active Boost</p>
+          <p class="text-xs font-bold text-pink-400" id="statMultiplier">1.0x</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: CORE MINING HUB                     -->
+    <!-- ========================================== -->
+    <main id="view-mine" class="tab-view flex-1 flex flex-col justify-between">
+      
+      <!-- Quick Action Strip: Daily Check-In & Watch Ad -->
+      <div class="grid grid-cols-2 gap-2.5 mb-3">
+        <button onclick="openDailyCheckinModal()" class="glass-card p-3 rounded-2xl flex items-center gap-3 border border-amber-500/30 hover:border-amber-400 transition active:scale-95 text-left">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-calendar-check"></i>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-white">Daily Check-In</p>
+            <p class="text-[10px] text-amber-300" id="streakStatusText">Day 1 Streak Ready</p>
+          </div>
+        </button>
+
+        <button onclick="triggerWatchAd()" class="glass-card p-3 rounded-2xl flex items-center gap-3 border border-pink-500/30 hover:border-pink-400 transition active:scale-95 text-left">
+          <div class="w-10 h-10 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-circle-play"></i>
+          </div>
+          <div>
+            <p class="text-xs font-bold text-white">Watch Ad</p>
+            <p class="text-[10px] text-pink-300">+<span id="quickAdRewardText">50</span> MSDQ (<span id="adsLeftText">5/5</span>)</p>
+          </div>
+        </button>
+      </div>
+
+      <!-- Interactive 3D MSDQ Core Node -->
+      <div class="flex flex-col items-center justify-center my-3 relative">
+        <div class="pulse-ring"></div>
+        <button id="msdqCoreBtn" onclick="handleCoreTap(event)" class="msdq-orb w-52 h-52 rounded-full flex flex-col items-center justify-center relative">
+          <div class="w-40 h-40 rounded-full bg-slate-950/80 border-2 border-cyan-400/50 flex flex-col items-center justify-center shadow-inner">
+            <i class="fa-solid fa-atom text-5xl text-cyan-400 mb-1 spin-slow"></i>
+            <span class="font-cyber font-extrabold text-sm tracking-widest text-white">MSDQ NODE</span>
+            <span class="text-[10px] text-cyan-300 mt-0.5" id="miningSessionStatus">TAP TO HASH</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- 24-Hour Cloud Mining Session Bar & Energy Tank -->
+      <div class="space-y-2.5 mt-2">
+        <!-- Cloud Session Timer -->
+        <div class="glass-card p-3 rounded-2xl flex items-center justify-between">
+          <div>
+            <p class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-cloud-bolt text-cyan-400"></i> Cloud Mining Cycle
+            </p>
+            <p class="text-[11px] text-slate-400" id="cycleTimerDisplay">Session Active • Auto-Mining</p>
+          </div>
+          <button id="startCycleBtn" onclick="activateMiningCycle()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-cyber font-bold text-xs shadow-lg shadow-cyan-500/25 active:scale-95">
+            BOOST CYCLE
+          </button>
+        </div>
+
+        <!-- Tap Energy Bar -->
+        <div class="glass-card p-3 rounded-2xl">
+          <div class="flex justify-between text-xs mb-1.5">
+            <span class="text-cyan-300 font-semibold"><i class="fa-solid fa-bolt mr-1"></i>Node Energy</span>
+            <span class="font-mono text-slate-300"><span id="energyCurrent">1000</span> / <span id="energyMaximum">1000</span></span>
+          </div>
+          <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+            <div id="energyProgressBar" class="h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-500 transition-all duration-200" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: DAILY REWARDS, ADS & EARN           -->
+    <!-- ========================================== -->
+    <section id="view-earn" class="tab-view hidden flex-1 space-y-4 overflow-y-auto">
+      <div class="glass-card p-4 rounded-2xl border border-amber-500/30">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-cyber text-sm font-bold text-amber-400">7-Day Check-In Matrix</h3>
+            <p class="text-xs text-slate-400">Check in consecutive days for mega $MSDQ drops</p>
+          </div>
+          <span class="bg-amber-500/20 text-amber-300 text-xs font-bold px-2.5 py-1 rounded-lg">
+            Streak: <span id="earnStreakBadge">1</span>d
+          </span>
+        </div>
+        <div id="checkinGridContainer" class="grid grid-cols-4 gap-2 mb-3"></div>
+        <button id="claimDailyMainBtn" onclick="claimDailyCheckIn()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-cyber font-bold text-xs shadow-lg active:scale-95">
+          CLAIM TODAY'S DROP
+        </button>
+      </div>
+
+      <!-- Watch Video Ads Hub -->
+      <div class="glass-card p-4 rounded-2xl border border-pink-500/30">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <h3 class="font-cyber text-sm font-bold text-pink-400">Sponsored Ad Nodes</h3>
+            <p class="text-xs text-slate-400">Watch 5-sec ad stream to earn instant $MSDQ + 2x Speed</p>
+          </div>
+          <i class="fa-solid fa-rectangle-ad text-2xl text-pink-400"></i>
+        </div>
+        <div class="bg-slate-900/90 rounded-xl p-3 flex justify-between items-center my-2">
+          <span class="text-xs text-slate-300">Reward per Video Ad</span>
+          <span class="text-xs font-bold text-emerald-400">+<span id="earnAdRewardVal">50</span> MSDQ</span>
+        </div>
+        <div class="bg-slate-900/90 rounded-xl p-3 flex justify-between items-center mb-3">
+          <span class="text-xs text-slate-300">Daily Ad Quota Remaining</span>
+          <span class="text-xs font-mono font-bold text-pink-300" id="earnAdQuotaVal">5 / 5</span>
+        </div>
+        <button onclick="triggerWatchAd()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white font-cyber font-bold text-xs shadow-lg active:scale-95">
+          <i class="fa-solid fa-play mr-1.5"></i>WATCH AD & CLAIM MSDQ
+        </button>
+      </div>
+
+      <!-- Social & Referral Ecosystem Tasks -->
+      <div class="glass-card p-4 rounded-2xl">
+        <h3 class="font-cyber text-sm font-bold text-cyan-400 mb-3">Ecosystem Quests</h3>
+        <div id="socialTasksContainer" class="space-y-2.5"></div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: MINING BOOSTERS & HARDWARE RIGS     -->
+    <!-- ========================================== -->
+    <section id="view-boosters" class="tab-view hidden flex-1 space-y-4 overflow-y-auto">
+      <!-- Temporary Turbo Boosters -->
+      <div class="glass-card p-4 rounded-2xl border border-cyan-500/30">
+        <h3 class="font-cyber text-sm font-bold text-cyan-400 mb-1">Overclock Boosters</h3>
+        <p class="text-xs text-slate-400 mb-3">Instant energy recovery & multiplier overdrive</p>
+        <div class="grid grid-cols-2 gap-2.5">
+          <button onclick="useFullBatteryBooster()" class="bg-slate-900/90 border border-slate-700 p-3 rounded-xl text-left hover:border-cyan-400 transition">
+            <div class="flex justify-between items-center mb-1">
+              <i class="fa-solid fa-battery-full text-emerald-400 text-lg"></i>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded" id="batteryBoostCount">3/3 Free</span>
+            </div>
+            <p class="text-xs font-bold text-white">Full Energy Refill</p>
+            <p class="text-[10px] text-slate-400">100% Instant Charge</p>
+          </button>
+
+          <button onclick="activateOverdriveMultiplier()" class="bg-slate-900/90 border border-slate-700 p-3 rounded-xl text-left hover:border-pink-400 transition">
+            <div class="flex justify-between items-center mb-1">
+              <i class="fa-solid fa-fire-flame-Simple text-pink-400 text-lg"></i>
+              <span class="text-[10px] bg-pink-500/20 text-pink-300 px-2 py-0.5 rounded">2x Speed</span>
+            </div>
+            <p class="text-xs font-bold text-white">Nitro Overdrive</p>
+            <p class="text-[10px] text-slate-400">Cost: 150 MSDQ (60s)</p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Permanent Mining Rig Shop (Dynamic from Config/Admin) -->
+      <div>
+        <h3 class="font-cyber text-sm font-bold text-amber-400 mb-2 px-1">Permanent Hardware Nodes</h3>
+        <div id="boosterShopContainer" class="space-y-2.5"></div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: MSDQ ARCADE GAMES                   -->
+    <!-- ========================================== -->
+    <section id="view-games" class="tab-view hidden flex-1 space-y-4 overflow-y-auto">
+      <div class="glass-card p-4 rounded-2xl border border-purple-500/30">
+        <div class="flex justify-between items-center mb-2">
+          <div>
+            <h3 class="font-cyber text-sm font-bold text-purple-400">MSDQ Quantum Wheel</h3>
+            <p class="text-xs text-slate-400">Entry: 40 MSDQ • Win up to 1,500 MSDQ</p>
+          </div>
+          <button onclick="playQuantumWheel()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 font-cyber font-bold text-xs shadow-lg active:scale-95">
+            SPIN (40)
+          </button>
+        </div>
+        <p id="wheelStatusMsg" class="text-xs text-amber-300 font-semibold h-4 mt-1"></p>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl border border-cyan-500/30">
+        <div class="flex justify-between items-center mb-2">
+          <div>
+            <h3 class="font-cyber text-sm font-bold text-cyan-400">Hashrate Crash Rocket</h3>
+            <p class="text-xs text-slate-400">Entry: 80 MSDQ • Catch up to 4.5x Multiplier</p>
+          </div>
+          <button onclick="playHashCrash()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-cyber font-bold text-xs shadow-lg active:scale-95">
+            LAUNCH (80)
+          </button>
+        </div>
+        <p id="crashStatusMsg" class="text-xs text-emerald-400 font-semibold h-4 mt-1"></p>
+      </div>
+
+      <div class="glass-card p-4 rounded-2xl border border-emerald-500/30">
+        <h3 class="font-cyber text-sm font-bold text-emerald-400 mb-1">Decrypt The Genesis Block</h3>
+        <p class="text-xs text-slate-400 mb-3">Select the right encrypted shard to win +250 MSDQ</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="decryptBlock(1)" class="py-2.5 bg-slate-900 border border-emerald-500/40 rounded-xl font-cyber text-xs hover:bg-emerald-500/20">SHARD #1</button>
+          <button onclick="decryptBlock(2)" class="py-2.5 bg-slate-900 border border-emerald-500/40 rounded-xl font-cyber text-xs hover:bg-emerald-500/20">SHARD #2</button>
+          <button onclick="decryptBlock(3)" class="py-2.5 bg-slate-900 border border-emerald-500/40 rounded-xl font-cyber text-xs hover:bg-emerald-500/20">SHARD #3</button>
+        </div>
+        <p id="decryptStatusMsg" class="text-xs text-emerald-300 font-semibold h-4 mt-2"></p>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- TAB 5: WEB3 & PAKISTAN PAYOUT WALLET       -->
+    <!-- ========================================== -->
+    <section id="view-wallet" class="tab-view hidden flex-1 space-y-4 overflow-y-auto">
+      <div class="glass-card p-4 rounded-2xl border border-emerald-500/30">
+        <h3 class="font-cyber text-sm font-bold text-emerald-400 mb-1">MSDQ Payout Gateway</h3>
+        <p class="text-xs text-slate-400 mb-3">Min Payout: <span id="minWithdrawText">1,000</span> MSDQ</p>
+
+        <div class="space-y-3">
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">Select Payout Channel</label>
+            <select id="payoutMethod" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:border-cyan-400 focus:outline-none">
+              <option value="USDT-TRC20">USDT (TRC-20 / Binance)</option>
+              <option value="EasyPaisa">EasyPaisa Instant Transfer</option>
+              <option value="JazzCash">JazzCash Mobile Account</option>
+              <option value="MSDQ-Mainnet">MSDQ Web3 Wallet (Metamask)</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">Account Number / Wallet Address</label>
+            <input id="payoutAccount" type="text" placeholder="03XX-XXXXXXX or T..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:border-cyan-400 focus:outline-none" />
+          </div>
+          <div>
+            <label class="text-[11px] text-slate-400 block mb-1">Amount in $MSDQ</label>
+            <input id="payoutAmount" type="number" placeholder="Enter MSDQ amount" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs text-white focus:border-cyan-400 focus:outline-none" />
+          </div>
+          <button onclick="submitWithdrawalRequest()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-slate-950 font-cyber font-bold text-xs shadow-lg active:scale-95">
+            SUBMIT WITHDRAWAL REQUEST
+          </button>
+        </div>
+      </div>
+
+      <!-- User Withdrawal History Log -->
+      <div class="glass-card p-4 rounded-2xl">
+        <h4 class="font-cyber text-xs font-bold text-slate-300 mb-2">Recent Withdrawal Requests</h4>
+        <div id="userWithdrawHistoryList" class="space-y-2 text-xs"></div>
+      </div>
+    </section>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-3 left-1/2 -translate-x-1/2 w-[94%] max-w-md glass-card rounded-2xl p-1.5 grid grid-cols-5 gap-1 z-40 border border-slate-700/80">
+      <button onclick="switchNavigation('mine', this)" class="nav-item active-nav py-2 rounded-xl flex flex-col items-center">
+        <i class="fa-solid fa-microchip text-sm"></i>
+        <span class="text-[10px] font-semibold mt-1">Mine</span>
+      </button>
+      <button onclick="switchNavigation('earn', this)" class="nav-item py-2 rounded-xl flex flex-col items-center text-slate-400">
+        <i class="fa-solid fa-calendar-check text-sm"></i>
+        <span class="text-[10px] font-semibold mt-1">Daily/Ads</span>
+      </button>
+      <button onclick="switchNavigation('boosters', this)" class="nav-item py-2 rounded-xl flex flex-col items-center text-slate-400">
+        <i class="fa-solid fa-rocket text-sm"></i>
+        <span class="text-[10px] font-semibold mt-1">Boosters</span>
+      </button>
+      <button onclick="switchNavigation('games', this)" class="nav-item py-2 rounded-xl flex flex-col items-center text-slate-400">
+        <i class="fa-solid fa-gamepad text-sm"></i>
+        <span class="text-[10px] font-semibold mt-1">Games</span>
+      </button>
+      <button onclick="switchNavigation('wallet', this)" class="nav-item py-2 rounded-xl flex flex-col items-center text-slate-400">
+        <i class="fa-solid fa-wallet text-sm"></i>
+        <span class="text-[10px] font-semibold mt-1">Wallet</span>
+      </button>
+    </nav>
