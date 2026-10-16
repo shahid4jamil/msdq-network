@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MSDQ Network — Master Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="bg-slate-950 text-white min-h-screen p-4 md:p-8">
+
+  <div class="max-w-5xl mx-auto space-y-6">
+    <!-- Top Admin Header -->
+    <header class="glass-card p-5 rounded-3xl flex flex-wrap items-center justify-between gap-4 border border-cyan-500/30">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl bg-cyan-500 text-slate-950 flex items-center justify-center font-cyber font-black text-lg">
+          ADM
+        </div>
+        <div>
+          <h1 class="font-cyber text-xl font-bold text-white">MSDQ NETWORK • MASTER CONTROL</h1>
+          <p class="text-xs text-slate-400">Real-Time Economy, Boosters, Ads & Payout Management</p>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <a href="../index.html" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold flex items-center gap-2">
+          <i class="fa-solid fa-mobile-screen"></i> Open User App
+        </a>
+        <button onclick="resetEntireDatabase()" class="px-4 py-2 rounded-xl bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-bold">
+          Reset Default DB
+        </button>
+      </div>
+    </header>
+
+    <!-- Global Economy & Mining Rates Control -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <section class="glass-card p-5 rounded-3xl space-y-4">
+        <h2 class="font-cyber text-sm font-bold text-cyan-400">
+          <i class="fa-solid fa-sliders mr-1.5"></i>1. Economy & Mining Parameters
+        </h2>
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="text-slate-400 block mb-1">$MSDQ Price (USDT)</label>
+            <input id="admCoinPrice" type="number" step="0.001" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Base Tap Reward</label>
+            <input id="admBaseTap" type="number" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Base Auto Mine (/sec)</label>
+            <input id="admBaseAuto" type="number" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Min Withdraw ($MSDQ)</label>
+            <input id="admMinWithdraw" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Watch Ad Reward ($MSDQ)</label>
+            <input id="admAdReward" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+          </div>
+          <div>
+            <label class="text-slate-400 block mb-1">Daily Ad Watch Limit</label>
+            <input id="admAdLimit" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+          </div>
+        </div>
+        <div>
+          <label class="text-xs text-slate-400 block mb-1">Global App Announcement Banner</label>
+          <input id="admAnnouncement" type="text" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-white" />
+        </div>
+        <button onclick="saveEconomySettings()" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-cyber font-bold text-xs">
+          SAVE & DEPLOY GLOBAL SETTINGS
+        </button>
+      </section>
+
+      <!-- User Balance & Account Control -->
+      <section class="glass-card p-5 rounded-3xl space-y-4">
+        <h2 class="font-cyber text-sm font-bold text-amber-400">
+          <i class="fa-solid fa-user-gear mr-1.5"></i>2. Pioneer User Management
+        </h2>
+        <div class="bg-slate-900/90 p-3.5 rounded-2xl text-xs space-y-1 border border-slate-800">
+          <p>Active User: <strong id="admUserName" class="text-cyan-300"></strong> (<span id="admUserUid"></span>)</p>
+          <p>Current Balance: <strong id="admUserBalance" class="text-amber-300"></strong> $MSDQ</p>
+          <p>Account Status: <strong id="admUserStatus" class="text-emerald-400"></strong></p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <label class="text-slate-400 block mb-1">Set Exact $MSDQ Balance</label>
+            <input id="admSetBalanceInput" type="number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+          </div>
+          <div class="flex items-end">
+            <button onclick="updateUserBalance()" class="w-full py-2.5 rounded-xl bg-amber-400 text-slate-950 font-cyber font-bold text-xs">
+              UPDATE BALANCE
+            </button>
+          </div>
+        </div>
+
+        <div class="flex gap-3 pt-2">
+          <button onclick="resetUserDailyLimits()" class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-bold">
+            Reset User Daily Check-In & Ads
+          </button>
+          <button onclick="toggleBanUser()" id="admBanBtn" class="flex-1 py-2.5 rounded-xl bg-red-500/20 border border-red-500/40 text-red-300 text-xs font-bold">
+            Ban / Unban User
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- Custom Booster Creator -->
+    <section class="glass-card p-5 rounded-3xl">
+      <h2 class="font-cyber text-sm font-bold text-pink-400 mb-3">
+        <i class="fa-solid fa-microchip mr-1.5"></i>3. Add New Mining Rig / Booster to Shop
+      </h2>
+      <div class="grid md:grid-cols-5 gap-3 text-xs">
+        <input id="newRigName" type="text" placeholder="Rig Name (e.g. ASIC Pro)" class="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+        <input id="newRigDesc" type="text" placeholder="Description (+15 MSDQ/s)" class="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+        <select id="newRigType" class="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white">
+          <option value="auto">Auto Mining (/sec)</option>
+          <option value="tap">Tap Power</option>
+          <option value="energy">Max Energy</option>
+        </select>
+        <input id="newRigPower" type="number" step="0.5" placeholder="Boost Value (e.g. 15)" class="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+        <input id="newRigCost" type="number" placeholder="Cost in MSDQ (e.g. 1500)" class="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-white" />
+      </div>
+      <button onclick="addNewBoosterRig()" class="mt-3 px-6 py-2.5 rounded-xl bg-pink-500 text-white font-cyber font-bold text-xs">
+        + PUBLISH NEW BOOSTER TO APP
+      </button>
+    </section>
+
+    <!-- Withdrawal Queue Approval Table -->
+    <section class="glass-card p-5 rounded-3xl">
+      <h2 class="font-cyber text-sm font-bold text-emerald-400 mb-3">
+        <i class="fa-solid fa-money-bill-transfer mr-1.5"></i>4. Pending Payout & Withdrawal Queue
+      </h2>
+      <div id="adminWithdrawQueue" class="space-y-2.5 text-xs"></div>
+    </section>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
